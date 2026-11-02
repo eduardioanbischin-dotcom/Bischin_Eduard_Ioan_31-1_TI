@@ -13,7 +13,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.*;
 
 public class Main {
@@ -24,6 +23,7 @@ public class Main {
         DocumentBuilder builder = factory.newDocumentBuilder();
         Set<String> stopwords = new HashSet<String>();
         Map<String, Integer> dictionarGlobal = new HashMap<>();
+        Map<Integer, Map<Integer,Integer>> documentswords = new HashMap<>();
         int idCurent = 0;
         try {
             Path stop = Path.of("src/stopwords.txt");
@@ -73,6 +73,8 @@ public class Main {
 
 
                         }
+
+
                     }
                     myWriter.write("\n");
 
@@ -100,22 +102,32 @@ public class Main {
 
 
                         }
+
                     }
+                    documentswords.put(i,words );
+
                     myWriter.write("\n");
 
-                    myWriter.write("--- Dictionar Global ---\n");
+                    myWriter.write("Dictionar Global\n");
                     for (Map.Entry<String, Integer> pereche : dictionarGlobal.entrySet()) {
                         myWriter.write(pereche.getKey() + " : " + pereche.getValue() + "\n");
                     }
 
-                    myWriter.write("\n--- Frecventa in acest text  ---\n");
+                    myWriter.write("\nFrecventa in acest text\n");
                     for (Map.Entry<Integer, Integer> pereche : words.entrySet()) {
                         myWriter.write(pereche.getKey() + " : " + pereche.getValue() + "\n");
-                    }     }
+                    }
+                }
             } catch (Exception e) {
-                System.out.println("A apărut o eroare la procesarea fișierului: " + xmlfile.getName());
+                System.out.println(" eroare la fișierul: " + xmlfile.getName());
                 e.printStackTrace();
             }
+        }
+        try( FileWriter myWriter = new FileWriter("documents words.txt")){
+           for(Integer doc: documentswords.keySet()){
+               myWriter.write(doc+"="+documentswords.get(doc)+"\n");
+           }
+
         }
 
     }
